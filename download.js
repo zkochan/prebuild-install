@@ -81,24 +81,26 @@ function downloadPrebuild (opts, cb) {
     log.info('unpacking @', cachedPrebuild)
     pump(fs.createReadStream(cachedPrebuild), zlib.createGunzip(), tfs.extract(opts.path, {readable: true, writable: true}).on('entry', updateName), function (err) {
       if (err) return cb(err)
-      if (!binaryName) return cb(error.invalidArchive())
 
       var resolved
-      try {
-        resolved = path.resolve(opts.path || '.', binaryName)
-      } catch (err) {
-        return cb(err)
-      }
-      log.info('unpack', 'resolved to ' + resolved)
-
-      if (opts.abi === process.versions.modules) {
+      if (binaryName) {
         try {
-          require(resolved)
+          resolved = path.resolve(opts.path || '.', binaryName)
         } catch (err) {
           return cb(err)
         }
-        log.info('unpack', 'required ' + resolved + ' successfully')
+        log.info('unpack', 'resolved to ' + resolved)
+
+        if (opts.abi === process.versions.modules) {
+          try {
+            require(resolved)
+          } catch (err) {
+            return cb(err)
+          }
+          log.info('unpack', 'required ' + resolved + ' successfully')
+        }
       }
+
       cb(null, resolved)
     })
   }
