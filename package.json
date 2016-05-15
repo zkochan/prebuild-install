@@ -38,9 +38,7 @@
     "standard": "^6.0.8",
     "tape": "^4.5.1"
   },
-  "bin": {
-    "prebuild-install": "./bin.js"
-  },
+  "bin": "./bin.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mafintosh/prebuild-install.git"
@@ -50,7 +48,8 @@
     "Julian Gruber <julian@juliangruber.com> (https://github.com/juliangruber)",
     "Brett Lawson <brett19@gmail.com> (https://github.com/brett19)",
     "Pieter Hintjens <ph@imatix.com> (https://github.com/hintjens)",
-    "Lars-Magnus Skog <ralphtheninja@riseup.net> (https://github.com/ralphtheninja)"
+    "Lars-Magnus Skog <ralphtheninja@riseup.net> (https://github.com/ralphtheninja)",
+    "Jesús Leganés Combarro <piranna@gmail.com> (https://github.com/piranna)"
   ],
   "license": "MIT",
   "bugs": {
