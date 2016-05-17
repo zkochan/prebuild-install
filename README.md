@@ -1,4 +1,4 @@
-# prebuild-install
+# prebuild-install [![Build Status](https://travis-ci.org/mafintosh/prebuild-install.svg?branch=master)](https://travis-ci.org/mafintosh/prebuild-install)
 
 A command line tool for easily install prebuilds for multiple version of node/iojs on a specific platform.
 
