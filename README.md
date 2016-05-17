@@ -26,7 +26,6 @@ prebuild-install [options]
   --download    -d  [url]       (download prebuilds, no url means github)
   --no-prebuild                 (skip prebuild download)
   --path        -p  path        (make a prebuild-install here)
-  --verbose                     (log verbosely)
   --debug                       (set Debug or Release configuration)
   --verbose                     (log verbosely)
   --version                     (print prebuild-install version and exit)
