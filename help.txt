@@ -5,5 +5,4 @@ prebuild-install [options]
   --path        -p  path        (make a prebuild-install here)
   --verbose                     (log verbosely)
   --debug                       (set Debug or Release configuration)
-  --verbose                     (log verbosely)
   --version                     (print prebuild-install version and exit)
