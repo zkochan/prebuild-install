@@ -35,7 +35,7 @@
     "a-native-module": "^1.0.0",
     "nsp": "^2.3.0",
     "rimraf": "^2.5.2",
-    "standard": "^6.0.8",
+    "standard": "^7.1.0",
     "tape": "^4.5.1"
   },
   "bin": "./bin.js",
