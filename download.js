@@ -84,7 +84,7 @@ function downloadPrebuild (opts, cb) {
     {
       readable: true,
       writable: true,
-      allowCreateFilesForHardLinks: true
+      hardlinkAsFilesFallback: true
     }
     var extract = tfs.extract(opts.path, options).on('entry', updateName)
 
