@@ -80,8 +80,7 @@ function downloadPrebuild (opts, cb) {
 
     log.info('unpacking @', cachedPrebuild)
 
-    var options =
-    {
+    var options = {
       readable: true,
       writable: true,
       hardlinkAsFilesFallback: true
