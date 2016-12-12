@@ -47,8 +47,8 @@ if (!(typeof pkg._from === 'string')) {
   process.exit(1)
 }
 
-if (opts.prebuild === false) {
-  log.info('install', '--no-prebuild specified, not attempting download.')
+if (opts.compile === true || opts.prebuild === false) {
+  log.info('install', '--build-from-source specified, not attempting download.')
   process.exit(1)
 }
 
