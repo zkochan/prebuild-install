@@ -10,7 +10,7 @@ Change your package.json install script to:
 ```
 ...
   "scripts": {
-    "install": "prebuild-install -d || node-gyp rebuild"
+    "install": "prebuild-install || node-gyp rebuild"
   }
 ...
 ```

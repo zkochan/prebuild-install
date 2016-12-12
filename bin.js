@@ -39,25 +39,23 @@ log.info('begin', 'Prebuild-install version', prebuildClientVersion)
 
 var opts = extend(rc, {pkg: pkg, log: log})
 
-if (opts.download) {
-  if (!(typeof pkg._from === 'string')) {
-    log.info('install', 'installing inside prebuild-install directory, skipping download.')
-    process.exit(1)
-  } else if (pkg._from.length > 4 && pkg._from.substr(0, 4) === 'git+') {
-    log.info('install', 'installing from git repository, skipping download.')
-    process.exit(1)
-  }
-
-  if (opts.prebuild === false) {
-    log.info('install', '--no-prebuild specified, not attempting download.')
-    process.exit(1)
-  }
-
-  download(opts, function (err) {
-    if (err) {
-      log.warn('install', err.message)
-      return process.exit(1)
-    }
-    log.info('install', 'Prebuild successfully installed!')
-  })
+if (!(typeof pkg._from === 'string')) {
+  log.info('install', 'installing inside prebuild-install directory, skipping download.')
+  process.exit(1)
+} else if (pkg._from.length > 4 && pkg._from.substr(0, 4) === 'git+') {
+  log.info('install', 'installing from git repository, skipping download.')
+  process.exit(1)
 }
+
+if (opts.prebuild === false) {
+  log.info('install', '--no-prebuild specified, not attempting download.')
+  process.exit(1)
+}
+
+download(opts, function (err) {
+  if (err) {
+    log.warn('install', err.message)
+    return process.exit(1)
+  }
+  log.info('install', 'Prebuild successfully installed!')
+})
