@@ -5,7 +5,8 @@ var log = require('npmlog')
 var fs = require('fs')
 var extend = require('xtend')
 
-var rc = require('./rc')
+var pkg = require(path.resolve('package.json'))
+var rc = require('./rc')(pkg)
 var download = require('./download')
 var util = require('./util')
 
@@ -26,8 +27,6 @@ if (!fs.existsSync('package.json')) {
   log.error('setup', 'No package.json found. Aborting...')
   process.exit(1)
 }
-
-var pkg = require(path.resolve('package.json'))
 
 if (rc.help) {
   console.error(fs.readFileSync(path.join(__dirname, 'help.txt'), 'utf-8'))

@@ -24,37 +24,42 @@ for (var j = 0; j < npmconfigs.length; ++j) {
   }
 }
 
-var rc = module.exports = require('rc')('prebuild', {
-  target: process.versions.node,
-  runtime: 'node',
-  arch: process.arch,
-  libc: process.env.LIBC,
-  platform: process.platform,
-  debug: false,
-  verbose: false,
-  prebuild: true,
-  compile: false,
-  path: '.',
-  proxy: process.env['HTTP_PROXY'],
-  'https-proxy': process.env['HTTPS_PROXY']
-}, minimist(process.argv, {
-  alias: {
-    target: 't',
-    runtime: 'r',
-    help: 'h',
-    arch: 'a',
-    path: 'p',
-    version: 'v',
-    download: 'd',
-    'build-from-source': 'compile',
-    compile: 'c'
-  }
-}))
+module.exports = function (pkg) {
+  var pkgConf = pkg.config || {}
+  var rc = require('rc')('prebuild-install', {
+    target: pkgConf.target || process.versions.node,
+    runtime: pkgConf.runtime || 'node',
+    arch: pkgConf.arch || process.arch,
+    libc: process.env.LIBC,
+    platform: process.platform,
+    debug: false,
+    verbose: false,
+    prebuild: true,
+    compile: false,
+    path: '.',
+    proxy: process.env['HTTP_PROXY'],
+    'https-proxy': process.env['HTTPS_PROXY']
+  }, minimist(process.argv, {
+    alias: {
+      target: 't',
+      runtime: 'r',
+      help: 'h',
+      arch: 'a',
+      path: 'p',
+      version: 'v',
+      download: 'd',
+      'build-from-source': 'compile',
+      compile: 'c'
+    }
+  }))
 
-if (rc.path === true) {
-  delete rc.path
+  if (rc.path === true) {
+    delete rc.path
+  }
+
+  return rc
 }
 
 if (!module.parent) {
-  console.log(JSON.stringify(module.exports, null, 2))
+  console.log(JSON.stringify(module.exports({}), null, 2))
 }
