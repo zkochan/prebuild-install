@@ -8,6 +8,7 @@ var zlib = require('zlib')
 var util = require('./util')
 var error = require('./error')
 var url = require('url')
+var tunnel = require('tunnel-agent')
 
 function downloadPrebuild (opts, cb) {
   var downloadUrl = util.getDownloadUrl(opts)
@@ -42,30 +43,22 @@ function downloadPrebuild (opts, cb) {
         }
 
         log.http('request', 'GET ' + downloadUrl)
-        var reqOpts = downloadUrl
-        var parsedDownloadUrl = url.parse(downloadUrl)
-        var parsedProxy = null
-        var isHttpsRequest = parsedDownloadUrl.protocol === 'https:'
+        var reqOpts = { url: downloadUrl }
+        var proxy = opts['https-proxy'] || opts.proxy
 
-        if (opts['https-proxy'] && isHttpsRequest) {
-          parsedProxy = url.parse(opts['https-proxy'])
-
-          if (parsedProxy.protocol === 'https:') {
-            return cb('https-proxies currently not supported')
-          }
-        } else if (opts.proxy && !isHttpsRequest) {
-          parsedProxy = url.parse(opts.proxy)
-        }
-
-        if (parsedProxy) {
-          reqOpts = {
-            host: parsedProxy.hostname,
-            port: parsedProxy.port,
-            path: downloadUrl,
-            headers: {
-              Host: parsedDownloadUrl.host
+        if (proxy) {
+          var parsedDownloadUrl = url.parse(downloadUrl)
+          var parsedProxy = url.parse(proxy)
+          var uriProtocol = (parsedDownloadUrl.protocol === 'https:' ? 'https' : 'http')
+          var proxyProtocol = (parsedProxy.protocol === 'https:' ? 'Https' : 'Http')
+          var tunnelFnName = [uriProtocol, proxyProtocol].join('Over')
+          reqOpts.agent = tunnel[tunnelFnName]({
+            proxy: {
+              host: parsedProxy.hostname,
+              port: +parsedProxy.port,
+              proxyAuth: parsedProxy.auth
             }
-          }
+          })
         }
 
         var req = get(reqOpts, function (err, res) {
