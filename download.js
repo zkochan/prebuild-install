@@ -61,6 +61,10 @@ function downloadPrebuild (opts, cb) {
           })
         }
 
+        if (opts['local-address']) {
+          reqOpts.localAddress = opts['local-address']
+        }
+
         var req = get(reqOpts, function (err, res) {
           if (err) return onerror(err)
           log.http(res.statusCode, downloadUrl)
