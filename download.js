@@ -99,7 +99,16 @@ function downloadPrebuild (opts, cb) {
     }
 
     log.info('unpacking @', cachedPrebuild)
-    pump(fs.createReadStream(cachedPrebuild), zlib.createGunzip(), tfs.extract(opts.path, {readable: true, writable: true}).on('entry', updateName), function (err) {
+
+    var options = {
+      readable: true,
+      writable: true,
+      hardlinkAsFilesFallback: true
+    }
+    var extract = tfs.extract(opts.path, options).on('entry', updateName)
+
+    pump(fs.createReadStream(cachedPrebuild), zlib.createGunzip(), extract,
+    function (err) {
       if (err) return cb(err)
 
       var resolved
