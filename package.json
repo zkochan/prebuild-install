@@ -23,7 +23,7 @@
     "github-from-package": "0.0.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "node-abi": "^2.0.0",
+    "node-abi": "^2.1.1",
     "noop-logger": "^0.1.1",
     "npmlog": "^4.0.1",
     "os-homedir": "^1.0.1",
