@@ -17,7 +17,7 @@ if (env.npm_config_argv) {
       }
     }
     if ((i = npmArgv.indexOf('--download')) !== -1) {
-      process.argv.push(npmArgv[i], npmArgv[i+1])
+      process.argv.push(npmArgv[i], npmArgv[i + 1])
     }
   } catch (e) { }
 }
