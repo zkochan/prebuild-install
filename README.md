@@ -39,8 +39,13 @@ When `prebuild-install` is run via an `npm` script, options
 arguments given to the `npm` command.
 
 ### Custom binaries
-You can override binary download location using environment variables with mask `%package%_binary_path`.  
-E.g. `leveldown_binary_site`
+The end user can override binary download location through environment variables in their .npmrc file.  
+The variable needs to meet the mask `% your package name %_binary_path`.  
+E.g.
+```
+leveldown_binary_site=http://overriden-host.com/overriden-path
+```
+Note that the package version subpath and file name will still be appended.
 
 ## License
 
