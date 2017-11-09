@@ -75,9 +75,19 @@ test('urlTemplate() returns different templates based on pkg and rc', function (
   }
   var t6 = util.urlTemplate(o6)
   t.equal(t6, 'http://foo.com/w00t/{name}-{major}.{minor}-{runtime}-v{abi}-{platform}-{arch}.tar.gz', 'pkg.binary.package_name is added after host and remote_path, custom format')
-  var o7 = {pkg: require('../package.json'), download: true}
-  var t7 = util.urlTemplate(o7)
-  t.equal(t7, 'https://github.com/mafintosh/prebuild-install/releases/download/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with no arguments, no pkg.binary, default format')
+  t.end()
+})
+
+test('getBaseUrl() should return either github or overridden url depending on environment variables', function (t) {
+  var o = {pkg: require('../package.json'), download: true}
+  var t1 = util.urlTemplate(o)
+  t.equal(t1, 'https://github.com/mafintosh/prebuild-install/releases/download/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with no arguments, no pkg.binary, default format')
+
+  var envProperty = 'npm_config_' + o.pkg.name + '_binary_site'
+  process.env[envProperty] = 'http://overriden-url.com/overriden-path'
+  var t2 = util.urlTemplate(o)
+  delete process.env[envProperty]
+  t.equal(t2, 'http://overriden-url.com/overriden-path/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz')
   t.end()
 })
 

@@ -31,16 +31,23 @@ function urlTemplate (opts) {
   }
 
   var packageName = '{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz'
-  if (opts.pkg.binary) {
-    return [
-      opts.pkg.binary.host,
-      opts.pkg.binary.remote_path,
-      opts.pkg.binary.package_name || packageName
-    ].map(function (path) {
-      return trimSlashes(path)
-    }).filter(Boolean).join('/')
+
+  if (!opts.pkg.binary) {
+    return getBaseUrl(opts) + '/v{version}/' + packageName
   }
-  return github(opts.pkg) + '/releases/download/v{version}/' + packageName
+
+  return [
+    opts.pkg.binary.host,
+    opts.pkg.binary.remote_path,
+    opts.pkg.binary.package_name || packageName
+  ].map(function (path) {
+    return trimSlashes(path)
+  }).filter(Boolean).join('/')
+}
+
+function getBaseUrl (opts) {
+  var overriddenUrl = process.env['npm_config_' + opts.pkg.name + '_binary_site']
+  return overriddenUrl || (github(opts.pkg) + '/releases/download')
 }
 
 function trimSlashes (str) {
@@ -74,6 +81,7 @@ function isYarnPath (execPath) {
 
 exports.getDownloadUrl = getDownloadUrl
 exports.urlTemplate = urlTemplate
+exports.getBaseUrl = getBaseUrl
 exports.cachedPrebuild = cachedPrebuild
 exports.localPrebuild = localPrebuild
 exports.prebuildCache = prebuildCache

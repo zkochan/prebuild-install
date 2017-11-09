@@ -38,6 +38,10 @@ When `prebuild-install` is run via an `npm` script, options
 `--build-from-source`, `--debug` and `--download`, may be passed through via
 arguments given to the `npm` command.
 
+### Custom binaries
+You can override binary download location using environment variables with mask `%package%_binary_path`.  
+E.g. `leveldown_binary_site`
+
 ## License
 
 MIT
