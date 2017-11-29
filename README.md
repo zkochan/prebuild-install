@@ -40,9 +40,9 @@ arguments given to the `npm` command.
 
 ### Custom binaries
 The end user can override binary download location through environment variables in their .npmrc file.  
-The variable needs to meet the mask `% your package name %_binary_site`. For example:
+The variable needs to meet the mask `% your package name %_binary_host` or `% your package name %_binary_host_mirror`. For example:
 ```
-leveldown_binary_site=http://overriden-host.com/overriden-path
+leveldown_binary_host=http://overriden-host.com/overriden-path
 ```
 Note that the package version subpath and file name will still be appended.  
 So if you are installing `leveldown@1.2.3` the resulting url will be:  
