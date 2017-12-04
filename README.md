@@ -1,6 +1,7 @@
 # prebuild-install
 
 [![Build Status](https://travis-ci.org/prebuild/prebuild-install.svg?branch=master)](https://travis-ci.org/prebuild/prebuild-install)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 > A command line tool for easily install prebuilds for multiple version of node/iojs on a specific platform.
 
