@@ -3,6 +3,7 @@ var fs = require('fs')
 var home = require('os-homedir')
 var util = require('../util')
 var path = require('path')
+var xtend = require('xtend')
 
 test('prebuildCache() for different environments', function (t) {
   var NPMCACHE = process.env.npm_config_cache
@@ -75,9 +76,34 @@ test('urlTemplate() returns different templates based on pkg and rc', function (
   }
   var t6 = util.urlTemplate(o6)
   t.equal(t6, 'http://foo.com/w00t/{name}-{major}.{minor}-{runtime}-v{abi}-{platform}-{arch}.tar.gz', 'pkg.binary.package_name is added after host and remote_path, custom format')
-  var o7 = {pkg: require('../package.json'), download: true}
+  var o7 = {
+    pkg: xtend({}, require('../package.json')),
+    download: true
+  }
+  delete o7.binary
+  var envProperty = 'npm_config_' + o7.pkg.name + '_binary_host'
+  process.env[envProperty] = 'http://overriden-url.com/overriden-path'
   var t7 = util.urlTemplate(o7)
-  t.equal(t7, 'https://github.com/mafintosh/prebuild-install/releases/download/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with no arguments, no pkg.binary, default format')
+  delete process.env[envProperty]
+  t.equal(t7, 'http://overriden-url.com/overriden-path/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with host mirror override')
+  var o8 = {
+    pkg: xtend({}, require('../package.json'), {
+      binary: {
+        host: 'http://foo.com',
+        remote_path: 'w00t',
+        package_name: '{name}-{major}.{minor}-{runtime}-v{abi}-{platform}-{arch}.tar.gz'
+      }
+    }),
+    download: true
+  }
+  envProperty += '_mirror'
+  process.env[envProperty] = 'http://overriden-url.com/overriden-path'
+  var t8 = util.urlTemplate(o8)
+  delete process.env[envProperty]
+  t.equal(t8, 'http://overriden-url.com/overriden-path/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with binary defined and host mirror override')
+  var o9 = {pkg: require('../package.json'), download: true}
+  var t9 = util.urlTemplate(o9)
+  t.equal(t9, 'https://github.com/mafintosh/prebuild-install/releases/download/v{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with no arguments, no pkg.binary, no host mirror, default format')
   t.end()
 })
 
