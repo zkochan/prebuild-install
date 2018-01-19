@@ -13,7 +13,8 @@ test('custom config and aliases', function (t) {
     '--help',
     '--path ../some/other/path',
     '--target 1.4.10',
-    '--runtime electron'
+    '--runtime electron',
+    '--libc testlibc'
   ]
   runRc(t, args.join(' '), {}, function (rc) {
     t.equal(rc.arch, 'ARCH', 'correct arch')
@@ -32,6 +33,7 @@ test('custom config and aliases', function (t) {
     t.equal(rc.target, rc.t, 'target alias')
     t.equal(rc.runtime, 'electron', 'correct runtime')
     t.equal(rc.runtime, rc.r, 'runtime alias')
+    t.equal(rc.libc, 'testlibc', 'libc family')
     t.equal(rc.abi, '50', 'correct ABI')
     t.end()
   })
