@@ -19,6 +19,7 @@
     "devops"
   ],
   "dependencies": {
+    "detect-libc": "^1.0.3",
     "expand-template": "^1.0.2",
     "github-from-package": "0.0.0",
     "minimist": "^1.2.0",
