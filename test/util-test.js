@@ -33,8 +33,8 @@ test('tempFile() ends with pid and random number', function (t) {
   var match = regexp.exec(tempFile)
   t.ok(match, 'matches')
   t.equal(match[1], cached, 'starts with cached file name')
-  fs.exists(tempFile, function (exists) {
-    t.equal(exists, false, 'file should not exist yet')
+  fs.access(tempFile, fs.R_OK | fs.W_OK, function (err) {
+    t.ok(err && err.code === 'ENOENT', 'file should not exist yet')
     t.end()
   })
 })

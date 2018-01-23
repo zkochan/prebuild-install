@@ -12,52 +12,17 @@ var build = path.join(__dirname, 'build')
 var unpacked = path.join(build, 'Release/leveldown.node')
 
 test('downloading from GitHub, not cached', function (t) {
-  t.plan(14)
+  t.plan(10)
   rm.sync(build)
   rm.sync(util.prebuildCache())
 
   var opts = getOpts()
   var downloadUrl = util.getDownloadUrl(opts)
   var cachedPrebuild = util.cachedPrebuild(downloadUrl)
-  var npmCache = util.npmCache()
   var tempFile
 
-  var existsCallNum = 0
-  var _access = fs.access ? fs.access.bind(fs) : fs.access
-  var _exists = fs.exists.bind(fs)
-  if (_access) {
-    fs.access = function (path, a, cb) {
-      if (existsCallNum++ === 0) {
-        t.equal(path, npmCache, 'fs.exists called for npm cache')
-        _access(path, cb)
-      }
-    }
-  }
-  fs.exists = function (path, cb) {
-    if (existsCallNum++ === 0) {
-      t.equal(path, npmCache, 'fs.exists called for npm cache')
-      _exists(path, cb)
-    } else {
-      t.equal(path, cachedPrebuild, 'fs.exists called for prebuild')
-      _exists(path, function (exists) {
-        t.equal(exists, false, 'prebuild should be cached')
-        cb(exists)
-      })
-    }
-  }
-
-  var mkdirCount = 0
-  var _mkdir = fs.mkdir.bind(fs)
-  fs.mkdir = function () {
-    var args = [].slice.call(arguments)
-    if (mkdirCount++ === 0) {
-      t.equal(args[0], util.prebuildCache(), 'fs.mkdir called for prebuildCache')
-    }
-    _mkdir.apply(fs, arguments)
-  }
-
   var writeStreamCount = 0
-  var _createWriteStream = fs.createWriteStream.bind(fs)
+  var _createWriteStream = fs.createWriteStream
   fs.createWriteStream = function (path) {
     if (writeStreamCount++ === 0) {
       tempFile = path
@@ -68,7 +33,7 @@ test('downloading from GitHub, not cached', function (t) {
     return _createWriteStream(path)
   }
 
-  var _createReadStream = fs.createReadStream.bind(fs)
+  var _createReadStream = fs.createReadStream
   fs.createReadStream = function (path) {
     t.equal(path, cachedPrebuild, 'createReadStream called for cachedPrebuild')
     return _createReadStream(path)
@@ -89,54 +54,26 @@ test('downloading from GitHub, not cached', function (t) {
     t.equal(fs.existsSync(cachedPrebuild), true, 'prebuild was cached')
     t.equal(fs.existsSync(unpacked), true, unpacked + ' should exist')
     t.equal(fs.existsSync(tempFile), false, 'temp file should be gone')
-    fs.exists = _exists
-    fs.access = _access
-    fs.mkdir = _mkdir
     fs.createWriteStream = _createWriteStream
     fs.createReadStream = _createReadStream
   })
 })
 
 test('cached prebuild', function (t) {
-  t.plan(8)
+  t.plan(5)
   rm.sync(build)
 
   var opts = getOpts()
   var downloadUrl = util.getDownloadUrl(opts)
   var cachedPrebuild = util.cachedPrebuild(downloadUrl)
-  var npmCache = util.npmCache()
 
-  var existsCallNum = 0
-  var _access = fs.access ? fs.access.bind(fs) : fs.access
-  var _exists = fs.exists.bind(fs)
-  if (_access) {
-    fs.access = function (path, a, cb) {
-      if (existsCallNum++ === 0) {
-        t.equal(path, npmCache, 'fs.exists called for npm cache')
-        _access(path, cb)
-      }
-    }
-  }
-  fs.exists = function (path, cb) {
-    if (existsCallNum++ === 0) {
-      t.equal(path, npmCache, 'fs.exists called for npm cache')
-      _exists(path, cb)
-    } else {
-      t.equal(path, cachedPrebuild, 'fs.exists called for prebuild')
-      _exists(path, function (exists) {
-        t.equal(exists, true, 'prebuild should be cached')
-        cb(exists)
-      })
-    }
-  }
-
-  var _createWriteStream = fs.createWriteStream.bind(fs)
+  var _createWriteStream = fs.createWriteStream
   fs.createWriteStream = function (path) {
     t.ok(/\.node$/i.test(path), 'this is the unpacked file')
     return _createWriteStream(path)
   }
 
-  var _createReadStream = fs.createReadStream.bind(fs)
+  var _createReadStream = fs.createReadStream
   fs.createReadStream = function (path) {
     t.equal(path, cachedPrebuild, 'createReadStream called for cachedPrebuild')
     return _createReadStream(path)
@@ -149,8 +86,6 @@ test('cached prebuild', function (t) {
     t.equal(fs.existsSync(unpacked), true, unpacked + ' should exist')
     fs.createReadStream = _createReadStream
     fs.createWriteStream = _createWriteStream
-    fs.exists = _exists
-    fs.access = _access
   })
 })
 
@@ -165,7 +100,7 @@ test('non existing host should fail with no dangling temp file', function (t) {
   var downloadUrl = util.getDownloadUrl(opts)
   var cachedPrebuild = util.cachedPrebuild(downloadUrl)
 
-  var _createWriteStream = fs.createWriteStream.bind(fs)
+  var _createWriteStream = fs.createWriteStream
   fs.createWriteStream = function (path) {
     t.ok(false, 'no temporary file should be written')
     return _createWriteStream(path)
@@ -223,7 +158,7 @@ test('error during download should fail with no dangling temp file', function (t
   var cachedPrebuild = util.cachedPrebuild(downloadUrl)
   var tempFile
 
-  var _createWriteStream = fs.createWriteStream.bind(fs)
+  var _createWriteStream = fs.createWriteStream
   fs.createWriteStream = function (path) {
     tempFile = path
     t.ok(/\.tmp$/i.test(path), 'this is the temporary file')
