@@ -80,8 +80,8 @@ function localPrebuild (url) {
   return path.join('prebuilds', path.basename(url))
 }
 
-function isYarnPath (execPath) {
-  return execPath ? /^yarn/.test(path.basename(execPath)) : false
+function isYarnOrPnpmPath (execPath) {
+  return execPath ? /^(yarn|pnpm)/.test(path.basename(execPath)) : false
 }
 
 exports.getDownloadUrl = getDownloadUrl
@@ -91,4 +91,4 @@ exports.localPrebuild = localPrebuild
 exports.prebuildCache = prebuildCache
 exports.npmCache = npmCache
 exports.tempFile = tempFile
-exports.isYarnPath = isYarnPath
+exports.isYarnOrPnpmPath = isYarnOrPnpmPath

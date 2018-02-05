@@ -191,11 +191,12 @@ test('getDownloadUrl() expands template to correct values', function (t) {
   t.end()
 })
 
-test('isYarnPath(): returns correct value', function (t) {
-  var yarn = util.isYarnPath
-  t.equal(yarn(null), false)
-  t.equal(yarn(undefined), false)
-  t.equal(yarn('/usr/local/lib/node_modules/npm/bin/npm-cli.js'), false)
-  t.equal(yarn('/usr/local/opt/yarn/libexec/lib/node_modules/yarn/bin/yarn.js'), true)
+test('isYarnOrPnpmPath(): returns correct value', function (t) {
+  var yarnOrPnpm = util.isYarnOrPnpmPath
+  t.equal(yarnOrPnpm(null), false)
+  t.equal(yarnOrPnpm(undefined), false)
+  t.equal(yarnOrPnpm('/usr/local/lib/node_modules/npm/bin/npm-cli.js'), false)
+  t.equal(yarnOrPnpm('/usr/local/opt/yarn/libexec/lib/node_modules/yarn/bin/yarn.js'), true)
+  t.equal(yarnOrPnpm('/usr/local/opt/pnpm/libexec/lib/node_modules/pnpm/bin/pnpm.js'), true)
   t.end()
 })

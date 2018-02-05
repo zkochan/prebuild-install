@@ -38,7 +38,7 @@ var opts = Object.assign({}, rc, {pkg: pkg, log: log})
 
 var execPath = process.env.npm_execpath || process.env.NPM_CLI_JS
 
-if (util.isYarnPath(execPath) && /node_modules/.test(process.cwd())) {
+if (util.isYarnOrPnpmPath(execPath) && /node_modules/.test(process.cwd())) {
   // From yarn repository
 } else if (opts.force) {
   log.warn('install', 'prebuilt binaries enforced with --force!')
