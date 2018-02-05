@@ -190,12 +190,3 @@ test('getDownloadUrl() expands template to correct values', function (t) {
   t.equal(url3, url2, 'scope does not matter for download url')
   t.end()
 })
-
-test('isYarnPath(): returns correct value', function (t) {
-  var yarn = util.isYarnPath
-  t.equal(yarn(null), false)
-  t.equal(yarn(undefined), false)
-  t.equal(yarn('/usr/local/lib/node_modules/npm/bin/npm-cli.js'), false)
-  t.equal(yarn('/usr/local/opt/yarn/libexec/lib/node_modules/yarn/bin/yarn.js'), true)
-  t.end()
-})
